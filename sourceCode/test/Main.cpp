@@ -23,35 +23,37 @@ boost::mt19937 gen;
 #define NUM_THREADS 20
 #include "../queue/StampingService.h"
 string filePath = "./data.txt";
-int count2 = 40000;
+int count2 = 1361;
 int *arr = new int[count2];
 
 Traveler *travelers = new Traveler[count2];
-string q1ans[]  = {"India", "USA", "China", "Bangladesh"};
-string felony[]  = {"yes", "no", "minor", "major"};
+//string q1ans[]  = {"India", "USA", "China", "Bangladesh"};
+//string felony[]  = {"yes", "no", "minor", "major"};
 
 
 using namespace stampingService;
 
 namespace dataGenerator {
 
-	string visa[] = { "F1", "B1", "H1B", "F2", "F3", "H2", "L1", "L2" };
+	string visa[] = { "5.2", "4", "4.6", "3.2", "3.4", "4.5", "5.5", "4.8" };
 
-	char prefix[][5] = { "ab", "din", "jon", "hpn", "lig", "vpn", "tim" };
+	char prefix[][5] = { "CA", "SD", "MN", "OR", "WA", "AK", "NH" };
 
-	char suffix[][5] = { "bd", "doc", "lab", "tom", "har", "gen", "linr", "vnn",
+	/*char suffix[][5] = { "bd", "doc", "lab", "tom", "har", "gen", "linr", "vnn",
 			"tmq", "hbm", "lin", "hel", "man", "abc", "xyz", "pqr", "mnp", "tdf",
 			"hbp" };
+			*/
 
-	char stem[][10] = { "jagr", "patil", "awai", "preet", "vija", "hell", "tomr",
+	/*char stem[][10] = { "jagr", "patil", "awai", "preet", "vija", "hell", "tomr",
 			"sdf", "ert", "vpnf", "hlmn", "timer", "henr", "zxc", "xyz", "bnm",
 			"hjk", "jkl", "dfg" };
+			*/
 
 	void generateName(char* name) {
 		name[0] = 0;
 		strcat(name, prefix[(rand() % 7)]);
-		strcat(name, stem[(rand() % 20)]);
-		strcat(name, suffix[(rand() % 16)]);
+		//strcat(name, stem[(rand() % 20)]);
+		//strcat(name, suffix[(rand() % 16)]);
 		name[0] = toupper(name[0]);
 		return;
 	}
@@ -71,7 +73,7 @@ namespace dataGenerator {
 			ltravelers[i].setVisaType(visa[i % 8]);
 			string length = ltravelers[i].toString().length() + "";
 			int totalLength = length.length() + 3;
-			myfile << totalLength << " | " << ltravelers[i].toString();
+			myfile << totalLength << "," << ltravelers[i].toString();
 		}
 
 		ltravelers = NULL;
@@ -90,13 +92,13 @@ namespace dataGenerator {
 			std::istringstream iss(line);
 
 			char * dup = strdup(line.c_str());
-			char * token = strtok(dup, " | ");
+			char * token = strtok(dup, ",");
 			byte = atoi(token);
-			firstname = strtok(NULL, " | ");
-			lastname = strtok(NULL, " | ");
-			visaType = strtok(NULL, " | ");
-			isValidVisa = strtok(NULL, " | ");
-			isStampingDone = strtok(NULL, " | ");
+			firstname = strtok(NULL, ",");
+			lastname = strtok(NULL, ",");
+			visaType = strtok(NULL, ",");
+			isValidVisa = strtok(NULL, ",");
+			isStampingDone = strtok(NULL, ",");
 			travelers[i].setFirstName(firstname);
 			travelers[i].setLastName(lastname);
 			travelers[i].setVisaType(visaType);
@@ -141,13 +143,13 @@ namespace Main {
 			if (i < count2) {
 
 				char * dup = strdup(line.c_str());
-				char * token = strtok(dup, " | ");
+				char * token = strtok(dup, ",");
 				byte = atoi(token);
-				firstname = strtok(NULL, " | ");
-				lastname = strtok(NULL, " | ");
-				visaType = strtok(NULL, " | ");
-				isValidVisa = strtok(NULL, " | ");
-				isStampingDone = strtok(NULL, " | ");
+				firstname = strtok(NULL, ",");
+				lastname = strtok(NULL, ",");
+				visaType = strtok(NULL, ",");
+				isValidVisa = strtok(NULL, ",");
+				isStampingDone = strtok(NULL, ",");
 
 				travelers[i].setFirstName(firstname);
 				travelers[i].setLastName(lastname);
@@ -211,7 +213,7 @@ namespace Main {
 				std::istringstream iss(line);
 
 				char * dup = strdup(line.c_str());
-				char delimiter[] = " | ";
+				char delimiter[] = ",";
 
 					firstname = line.substr(0, line.find(delimiter));
 					line = line.substr(line.find(delimiter)+1, line.length());
@@ -319,12 +321,12 @@ namespace Main {
 
 				char * dup = strdup(line.c_str());
 				//cout << "\nN 320 PT"<<endl;
-				char * token = strtok(dup, " | ");
+				char * token = strtok(dup, ",");
 				//cout << "\nN 322 PT"<<endl;
 
 				byte = atoi(token);
 				//cout << "\nN 325 PT"<<endl;
-				char delimiter[] = " | ";
+				char delimiter[] = ",";
 				//cout << "\n323 PT"<<endl;
 
 				firstname = line.substr(0, line.find(delimiter));
